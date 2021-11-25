@@ -64,3 +64,6 @@ spec:
 Check the make sure that the deployment and services are running
 kubectl get deployment
 kubectl get service
+
+
+Please, note that the NodePort is what will expose Jenkins on all kubernetes node IPs on port 30008
