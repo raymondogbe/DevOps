@@ -31,9 +31,9 @@ spec:
   selector:
     app: jenkins
   ports:
-    - port: 8080
-      targetPort: 8080
-      nodePort: 30008
+    - port: 8080  (port on the service)
+      targetPort: 8080  (port on the pod)
+      nodePort: 30008  (port on the node)
 
 
 Create a deployment with the given parameters
