@@ -1,5 +1,22 @@
 QUESTION
 The Nautilus development team started with new project development. They have created different Git repositories to manage respective project's source code. 
-One of the repo /opt/apps.git was created recently. The team has given us a sample index.html file that is currently present on jump host under /tmp. 
+One of the repo /opt/cluster.git was created recently. The team has given us a sample index.html file that is currently present on jump host under /tmp. 
 The repository has been cloned at /usr/src/kodekloudrepos on storage server in Stratos DC.
 Copy sample index.html file from jump host to storage server under cloned repository at /usr/src/kodekloudrepos, add/commit the file and push to master branch.
+
+
+
+SOLUTION
+From the question, the index.html file in on one server and I am expected to copy into another server
+#sudo scp /tmp/index.html natasha@storage:/tmp
+
+For some permission reasons, I couldnt copy the index.html file from the /tmp in the jump host directly into sudo /usr/src/kodekloudrepos/cluster/
+So, I had to copy it into tmp folder on the storage folder
+
+#cp /tmp/index.html /usr/src/kodekloudrepos/cluster/
+
+#sudo git add index.html
+
+#sudo git commit -m "index.html"
+
+#sudo git push origin master
