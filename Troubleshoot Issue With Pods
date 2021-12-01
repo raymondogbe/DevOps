@@ -1,0 +1,34 @@
+QUESTION:
+One of the junior DevOps team members was working on to deploy a stack on Kubernetes cluster. 
+Somehow the pod is not coming up and its failing with some errors. We need to fix this as soon as possible. Please look into it.
+
+There is a pod named webserver and the container under it is named as httpd-container. It is using image httpd:latest
+
+There is a sidecar container as well named sidecar-container which is using ubuntu:latest image.
+
+Look into the issue and fix it, make sure pod is in running state and you are able to access the app.
+
+Note: The kubectl utility on jump_host has been configured to work with the kubernetes cluster.
+
+
+
+SOLUTION
+
+Check the status of the Pods
+#kubectl get pods
+
+I realised that the pod name webserver has 2 containers, one is running and the other is not.
+NAME        READY   STATUS             RESTARTS   AGE
+webserver   1/2     ImagePullBackOff   0          43s
+
+Check the detailed description of the pod
+#kubectl describe pods webserver
+I saw that the image had issues. It was httpd:latests instead of httpd:latest
+
+To edit a pod
+#kubectl edit pods webserver
+
+Once that was done, I waited for few seconds and rechecked the status of the pods and both containers are now running.
+
+NAME        READY   STATUS    RESTARTS   AGE
+webserver   2/2     Running   0          7m2s
