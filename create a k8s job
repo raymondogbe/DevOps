@@ -1,0 +1,16 @@
+  QUESTION
+  Create ajob with the name throw-dice-job an the image is kodekloud/throw-dice
+  
+  
+  SOLUTION
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: throw-dice-job
+spec:
+   template:
+    spec:
+      containers:
+      - image: kodekloud/throw-dice
+        name: throw-dice
+      restartPolicy: Never
