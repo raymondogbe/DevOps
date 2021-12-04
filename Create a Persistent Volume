@@ -1,0 +1,24 @@
+QUESTION:
+Create a Persistent Volume with the given specification.
+Volume Name: pv-log
+Storage: 100Mi
+Access Modes: ReadWriteMany
+Host Path: /pv/log
+Reclaim Policy: Retain
+
+
+
+SOLUTION
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-log:":"
+  namespace: default
+spec:
+  accessModes:
+       - ReadWriteMany
+  capacity:
+       storage: 100Mi
+  hostPath:
+          path: /pv/log
+  persistentVolumeReclaimPolicy: Retain
