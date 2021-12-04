@@ -1,0 +1,26 @@
+QUESTION
+Configure a volume to store these logs at /var/log/webapp on the host.
+Use the spec provided below.
+image: kodekloud/event-simulator
+Pod name: webapp
+hostPath: /var/log/webapp
+volumeMounts: /log
+
+
+SOLUTION
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp
+spec:
+  containers:
+  - image: kodekloud/event-simulator
+    name: event-simulator
+    volumeMounts:
+    - mountPath: /log
+      name: log-volume
+  volumes:
+  - name: log-volume
+    hostPath:
+            path: /var/log/webapp
+            type: Directory
