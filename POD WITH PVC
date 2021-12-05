@@ -18,7 +18,7 @@ spec:
       name: log-volume
   volumes:
   - name: log-volume
-    persistentvolumeclaim:
+    persistentVolumeClaim:
             claimName: claim-log-1
             
             
