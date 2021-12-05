@@ -29,3 +29,26 @@ spec:
      hostPath:
             path: /var/log/webapp
             type: Directory
+
+
+ANOTHER TASK
+Create a new pod called nginx with the image nginx:alpine. The Pod should make use of the PVC local-pvc and mount the volume at the path /var/www/html.
+The PV local-pv should in a bound state.
+
+
+SOLUTION:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - image: nginx:alpine
+    name: nginxpod
+    volumeMounts:
+    - mountPath: /var/www/html
+      name: log-volume
+  volumes:
+  - name: log-volume
+    persistentVolumeClaim:
+            claimName: local-pvc
