@@ -1,0 +1,41 @@
+QUESTION
+The Nautilus application development team has been working on a project repository /opt/beta.git. 
+This repo is cloned at /usr/src/kodekloudrepos on storage server in Stratos DC. 
+They recently shared the following requirements with DevOps team:
+
+a. Create a new branch devops in /usr/src/kodekloudrepos/beta repo from master and copy the /tmp/index.html file (on storage server itself). 
+Add/commit this file in the new branch and merge back that branch to the master branch. Finally, push the changes to origin for both of the branches.
+
+
+SOLUTION
+SSH into the storage server
+#ssh natasha@storage
+
+Create new branch
+cd into /usr/src/kodekloudrepos/beta and create new branch
+#git checkout -b <devops>
+
+
+Copy the index.html file into the branch
+# cp /tmp/index.html . OR /usr/src/kodekloudrepos/beta
+
+Do a git add
+#git add index.html
+
+Do a git commit
+#git commit -m "added a new file index.html"
+
+Do a git checkout to master according to the question
+#git checkout master
+
+
+Merge the branch "devops" to master branch
+#git merge devops
+
+
+Push the changes to master
+#git push origin master
+
+
+The task was alittle confusing because at first, I thought that I was supposed to create a new folder in the cluster folder.
+Reading the question on a second time, then, I realized what to do.
