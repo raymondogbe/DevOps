@@ -49,3 +49,27 @@ Note: Validation will try to run the playbook using command ansible-playbook -i 
   
  Though the code was combined, but I had to install the first line of text and then later used the "insertbefore" to input the new line of text.
  The reason is because if i use the code as stated above, the first text file will not be created but the "line" text will be created.
+ 
+ 
+ To remove the text already there:
+ ---
+- hosts: stapp0*
+  become: yes
+  name: play1
+  tasks:
+  - name: "Install web server"
+    yum:
+      name: httpd
+      state: present
+  - name: "Start web server"
+    service:
+      name: httpd
+      state: started
+  - name: lineinlife
+    lineinfile:
+      path: /var/www/html/index.html
+      regexp: 'Welcome to xFusionCorp Industries!'
+      state: absent
+      owner: apache
+      group: apache
+      mode: 0644
