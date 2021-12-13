@@ -73,3 +73,9 @@ Note: Validation will try to run the playbook using command ansible-playbook -i 
       owner: apache
       group: apache
       mode: 0644
+      
+      
+  The inventory
+stapp01 ansible_host=172.16.125.10 ansible_ssh_pass=****** ansible_user=gona
+stapp02 ansible_host=172.16.125.11 ansible_ssh_pass=******** ansible_user=acid
+stapp03 ansible_host=172.16.125.12 ansible_ssh_pass=******** ansible_user=babna
