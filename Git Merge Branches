@@ -17,7 +17,7 @@ cd into /usr/src/kodekloudrepos/beta and create new branch
 
 
 Copy the index.html file into the branch
-# cp /tmp/index.html . OR /usr/src/kodekloudrepos/beta
+# cp /tmp/index.html . OR /usr/src/kodekloudrepos/beta/devops
 
 Do a git add
 #git add index.html
@@ -37,5 +37,3 @@ Push the changes to master
 #git push origin master
 
 
-The task was alittle confusing because at first, I thought that I was supposed to create a new folder in the cluster folder.
-Reading the question on a second time, then, I realized what to do.
