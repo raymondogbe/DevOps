@@ -1,0 +1,57 @@
+QUESTION:
+The Nautilus DevOps team is planning to set up a Nagios monitoring tool to monitor some applications, services etc. 
+They are planning to deploy it on Kubernetes cluster. Below you can find more details.
+
+Create a deployment Nagios-deployment for Nagios core. The container name must be nagios-container and image: jasonrivers/nagios
+Create a service nagios-service with nodePort as 30008
+
+Create a user & password for the Nagios Core Web Interface using xFusionCorp as username and password as ...........
+
+
+SOLUTION
+create deployment and service
+# vi nagios-deployment.yaml
+# kubectl create -f nagios-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nagios-deployment
+  labels:
+    app: nagios-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nagios-deployment
+  template:
+    metadata:
+      labels:
+        app: nagios-deployment
+    spec:
+      containers:
+      - name: nagios-container
+        image: jasonrivers/nagios
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nagios-service
+spec:
+  type: NodePort
+  selector:
+    app: nagios-deployment
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30008
+
+Once this is deployed, try to get the pod name and log into it using:
+# kubectl exec -it (pod name) -- /bin/bash
+
+You can use the "whereis" nagios to know the path nagios is
+nagios-deployment-74ccd9c66d-m4z4r is the pod name
+
+Use the command below to create a user name xFusionCorp and you will later be prompted for a password.
+#root@nagios-deployment-74ccd9c66d-m4z4r:/# htpasswd /opt/nagios/etc/htpasswd.users xFusionCorp
