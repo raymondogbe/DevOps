@@ -1,0 +1,24 @@
+QUESTION
+The Nautilus DevOps team is testing applications containerization, which issupposed to be migrated on docker container-based environments soon. In today's stand-up meeting one of the team members has been assigned a task to create and test a docker container with certain requirements. Below are more details:
+
+a. On App Server 2 in Stratos DC pull nginx image (preferably latest tag but others should work too).
+
+b. Create a new container with name games from the image you just pulled.
+
+c. Map the host volume /opt/itadmin with container volume /home. There is an sample.txt file present on same server under /tmp; copy that file to /opt/itadmin. 
+Also please keep the container in running state.
+
+
+SOLUTION:
+
+a. use docker pull
+# docker pull nginx:latest
+
+b. Create a container named games using the nginx latest and map the volume
+#docker run --name games -v /opt/itadmin:/home/ -d -it nginx:latest
+
+c. copy files from /tmp to /opt/itadmin
+# cp /tmp/sample.txt /opt/itadmin/
+
+To validate, enter into the container using the container name and check for the file in the /home dir
+docker exec -it 2cf74176c95a /bin/bash
