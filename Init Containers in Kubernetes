@@ -1,0 +1,75 @@
+QUESTION
+There are some applications that need to be deployed on Kubernetes cluster and these apps have some pre-requisites where some configurations need to be changed before deploying the app container. Some of these changes cannot be made inside the images so the DevOps team has come up with a solution to use init containers to perform these tasks during deployment. Below is a sample scenario that the team is going to test first.
+
+
+
+Create a Deployment named as ic-deploy-nautilus.
+
+Configure spec as replicas should be 1, labels app should be ic-nautilus, template's metadata lables app should be the same ic-nautilus.
+
+The initContainers should be named as ic-msg-nautilus, use image fedora, preferably with latest tag and use command '/bin/bash', '-c' and 'echo Init Done - Welcome to xFusionCorp Industries > /ic/blog'. The volume mount should be named as ic-volume-nautilus and mount path should be /ic.
+
+Main container should be named as ic-main-nautilus, use image fedora, preferably with latest tag and use command '/bin/bash', '-c' and 'while true; do cat /ic/blog; sleep 5; done'. The volume mount should be named as ic-volume-nautilus and mount path should be /ic.
+
+Volume to be named as ic-volume-nautilus and it should be an emptyDir type.
+
+Note: The kubectl utility on jump_host has been configured to work with the kubernetes cluster.
+
+
+
+SOLUTION
+Create a definition file
+kubectl create -f deploy-nautilus.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ic-deploy-nautilus
+  labels:
+    app: ic-nautilus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ic-nautilus
+  template:
+    metadata:
+      labels:
+        app: ic-nautilus
+    spec:
+      containers:
+      - name: ic-main-nautilus
+        image: fedora:latest
+        command: ['/bin/bash', '-c', "while true; do cat /ic/blog; sleep 5; done"]
+        volumeMounts:
+        - mountPath: /ic
+          name: ic-volume-nautilus
+      volumes:
+        - name: ic-volume-nautilus
+          emptyDir: {}
+      initContainers:
+      - name: ic-msg-nautilus
+        image: fedora:latest
+        command: ['/bin/bash', '-c', "echo Init Done - Welcome to xFusionCorp Industries > /ic/blog"]
+        volumeMounts:
+        - mountPath: /ic
+          name: ic-volume-nautilus
+      volumes:
+        - name: ic-volume-nautilus
+          emptyDir: {}
+
+
+Validation
+kubectl exec ic-deploy-nautilus-7dc666cf4-jpv8g -- cat /ic/blog
+
+OR
+
+kubectl logs -f ic-deploy-nautilus-7dc666cf4-jpv8g
+
+
+What is initcontainer?
+Init containers are exactly like regular containers, except:
+
+Init containers always run to completion.
+Each init container must complete successfully before the next one starts.
+A Pod can have multiple containers running apps within it, but it can also have one or more init containers, which are run before the app containers are started.
