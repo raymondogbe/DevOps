@@ -1,0 +1,42 @@
+QUESTION
+One of the DevOps engineers was trying to deploy a python app on Kubernetes cluster. 
+Unfortunately, due to some mis-configuration, the application is not coming up. 
+Please take a look into it and fix the issues. Application should be accessible on the specified nodePort.
+
+The deployment name is python-deployment-xfusion, its using poroko/flask-demo-appimage. The deployment and service of this app is already deployed.
+
+nodePort should be 32345 and targetPort should be python flask app's default port.
+Note: The kubectl on jump_host has been configured to work with the kubernetes cluster.
+
+
+SOLUTION
+This task wants you to show how much you can troubleshoot.
+
+Since the deployment and service were already deployed, I needed to check and understand where the error lies
+
+#kubectl get all
+NAME                                             READY   STATUS         RESTARTS   AGE
+pod/python-deployment-xfusion-66fbc54cf5-gzwr7   0/1     ErrImagePull   0          67s
+
+NAME                             TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+service/kubernetes               ClusterIP   10.96.0.1      <none>        443/TCP          150m
+service/python-service-xfusion   NodePort    10.96.63.162   <none>        8080:32345/TCP   67s
+
+Having checked the deployment and service, I realised the status of the pod as  ErrImagePull (This means that there is an issue with the image used). 
+Again, I realised that the ready state is 0/1, meaning that neither the pod or deployment is running.
+Finally, checking the service, I saw that the port used was 8080 as against the python flask app's default port which is 5000.
+
+In order to make changes, I had to create a definition file from the deployment.
+#kubectl get deployment python-deployment-xfusion -o yaml > python-deployment-xfusion.yaml
+I changed the Image name in there from poroko/flask-demo-app to poroko/flask-app-demo
+To effect the change
+#kubectl apply -f python-deployment-xfusion.yaml
+
+After the change above, the deployment and pod was running but the app cannot be displayed. Therefore, I had to check the service
+
+
+#kubectl get svc python-service-xfusion -o yaml > python-service.yaml
+I changed the target port and port from 8080 to 5000
+To effect the change:
+#kubectl apply -f python-service.yaml
+
