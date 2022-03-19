@@ -1,5 +1,7 @@
 QUESTION:
-We have an application running on Kubernetes cluster using nginx web server. The Nautilus application development team has pushed some of the latest changes and those changes need be deployed. The Nautilus DevOps team has created an image nginx:1.19 with the latest changes.
+We have an application running on Kubernetes cluster using nginx web server. 
+The Nautilus application development team has pushed some of the latest changes and those changes need be deployed. 
+The Nautilus DevOps team has created an image nginx:1.19 with the latest changes.
 
 Perform a rolling update for this application and incorporate nginx:1.18 image. The deployment name is nginx-deployment
 
@@ -38,8 +40,10 @@ NAME               READY   UP-TO-DATE   AVAILABLE   AGE
 nginx-deployment   3/3     3            3           6m10s
 
 
-kubectl rollout history deployment nginx-deployment --revision=1
-kubectl set image deployment nginx-deployment nginx-container=nginx:1.18. # The nginx-container is the name of the container.
+#kubectl rollout history deployment nginx-deployment --revision=1
+
+#kubectl set image deployment nginx-deployment nginx-container=nginx:1.18. # The nginx-container is the name of the container.
+
 This command set the image of the deployment to 1.18
 
 kubectl describe deployment nginx-deployment
