@@ -1,0 +1,39 @@
+The Nautilus DevOps team has started practicing some pods, and services deployment on Kubernetes platform, as they are planning to migrate most of their applications on Kubernetes. 
+Recently one of the team members has been assigned a task to create a deploymnt as per details mentioned below:
+
+Create a deployment named httpd to deploy the application httpd using the image httpd:latest (remember to mention the tag as well)
+
+Note: The kubectl utility on jump_host has been configured to work with the kubernetes cluster.
+
+This was quite an easy task to resolved since it is just a to create a deployment
+
+
+ANSWER
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd
+  labels:
+    app: httpd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpd
+  template:
+    metadata:
+      labels:
+        app: httpd
+    spec:
+      containers:
+      - name: httpd
+        image: httpd:latest
+        ports:
+        - containerPort: 80
+        
+To create the deployment
+#kubectl create -f <nameofthedefinitionfile.yaml>
+
+To check if the pod and service are runing
+#kubectl get all
