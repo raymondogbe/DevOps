@@ -1,0 +1,19 @@
+Nautilus project developers are planning to start testing on a new project. 
+As per their meeting with the DevOps team, they want to test containerized environment application features. 
+As per details shared with DevOps team, we need to accomplish the following task:
+
+a. Pull busybox:musl image on App Server 1 in Stratos DC and re-tag (create new tag) this image as busybox:news.
+
+SSH into the appserver1
+#docker pull busybox:musl
+
+[root@stapp01 tony]# docker image ls
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+busybox      musl      b4794c5fbbbe   3 weeks ago   1.43MB
+
+Use the below command to retag
+# docker image tag busybox:musl busybox:news
+[root@stapp01 tony]# docker image ls
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+busybox      musl      b4794c5fbbbe   3 weeks ago   1.43MB
+busybox      news      b4794c5fbbbe   3 weeks ago   1.43MB
