@@ -1,0 +1,12 @@
+  QUESTION
+  Nautilus DevOps team is testing some applications deployment on some of the application servers. They need to deploy a nginx container on Application Server 1. 
+  Please complete the task as per details given below:
+On Application Server 3 create a container named nginx_3 using image nginx with alpine tag and make sure container is in running state.
+
+
+
+ANSWER
+Change the server to Server 1
+docker container run -itd --name nginx_1 nginx:alpine
+
+Remember that if you do not add the "d" argument, the container will always exit.
