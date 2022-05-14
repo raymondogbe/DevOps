@@ -46,3 +46,12 @@ pipeline {
       }
     }
 }
+
+
+NOTE:
+Create IAM role and With AmazonEC2ContainerRegistryFullAccess policy and attach with the Jenkins EC2 Instance
+To create Role
+Log into AWS and go to IAM, click on Role and click on Create Role. Enter a name for the role, Select EC2 and enter or search for the policy(permission). Click on Create
+
+To attach Role to the Jenkins instance on EC2
+Log into AWS, open EC2, click on the jenkins instance, right click on the name and select security. Click on modify IAM role. Select the name of the created Rold and click save.
