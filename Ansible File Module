@@ -38,3 +38,5 @@ PLAYBOOK
         
         
  ansible-playbook -i inventory playbook.yml
+ 
+ ansible -i inventory all -a "ls /home/"   To verify instead of logging into the remote host individually
