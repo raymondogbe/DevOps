@@ -1,0 +1,37 @@
+QUESTION
+There is data on jump host that needs to be copied on all application servers in Stratos DC. Nautilus DevOps team want to perform this task using Ansible. 
+Perform the task as per details mentioned below:
+
+a. On jump host create an inventory file /home/thor/ansible/inventory and add all application servers as managed nodes.
+
+b. On jump host create a playbook /home/thor/ansible/playbook.yml to copy /usr/src/devops/index.html file to all application servers at location /opt/devops.
+
+Note: Validation will try to run the playbook using command ansible-playbook -i inventory playbook.yml so please make sure the playbook works this way without passing any extra arguments.
+
+
+
+SOLUTION
+Create and inventory for all the nodes
+#vi inventory
+stapp01 ansible_host=172.16.238.10 ansible_ssh_pass=Ir0nM@n ansible_user=tony
+stapp02 ansible_host=172.16.238.11 ansible_ssh_pass=Am3ric@ ansible_user=steve
+stapp03 ansible_host=172.16.238.12 ansible_ssh_pass=BigGr33n ansible_user=banner
+
+
+Create a playbook.yml to contain the play to copy the file from the server to the remote hosts
+
+#vi playbook.yml
+---
+- hosts: stapp*
+  become: yes 
+  tasks:
+    - name: copy index.html to opts/devops 
+      copy:
+        src: /usr/src/devops/index.html
+        dest: /opt/devops
+      tags:
+        - simple_copy
+Run the command to carry our the files copy
+#ansible-playbook -i inventory playbook.yml
+
+When you are done, ssh into each of the host to confirm
