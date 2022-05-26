@@ -139,6 +139,7 @@ resource "aws_instance" "webserver_instance" {
   ami           = "ami-09d56f8956ab235b3"
   instance_type = "t2.micro"
   availability_zone = "us-east-1a"
+  key_name = "jenkins-key"   #This is needed to be able to launch into the EC2 machine
   network_interface {
     device_index = 0
     network_interface_id = aws_network_interface.webserver_nic.id
