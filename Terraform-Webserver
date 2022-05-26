@@ -1,0 +1,156 @@
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "4.8.0"
+    }
+  }
+}
+
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+# 1. Create a VPC
+resource "aws_vpc" "first_vpc" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "my_vpc"
+  }
+}
+
+# 2. Create Internet Gateway
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.first_vpc.id   # This connects the igw to the vpc
+
+  tags = {
+    Name = "vpc_igw"
+  }
+}
+
+# 3. Create Custom Route Table
+resource "aws_route_table" "rt" {
+  vpc_id = aws_vpc.first_vpc.id   # This connects the route table to the vpc
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id # This connects the route table to the igw
+  }
+
+  route {
+    ipv6_cidr_block        = "::/0"
+    gateway_id = aws_internet_gateway.igw.id  # This connects this IPV6 route table to the igw
+  }
+
+  tags = {
+    Name = "vpc_route_table"
+  }
+}
+
+# 4. Create a subnet
+resource "aws_subnet" "private_subnet" {
+  vpc_id     = aws_vpc.first_vpc.id
+  cidr_block = "10.0.1.0/24"
+availability_zone = "us-east-1a"
+  tags = {
+    Name = "Private-Subnet"
+  }
+}
+
+# 5. Associate Subnet with Route Table   This associate the subnet to a route table
+resource "aws_route_table_association" "assoc1" {
+  subnet_id      = aws_subnet.private_subnet.id
+  route_table_id = aws_route_table.rt.id
+}
+
+# 6. Create Security Group to allow SSH (22) HTTP(80) HTTPS(443)
+resource "aws_security_group" "allow_webserver" {
+  name        = "allow_webtraffic"
+  description = "Allow web inbound traffic"
+  vpc_id      = aws_vpc.first_vpc.id
+
+  ingress {
+    description      = "HTTPS traffic to the webserver"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "TCP"
+    cidr_blocks      = ["0.0.0.0/0"] # you can put in your local computer, so that certain device can reach the webserver
+    #ipv6_cidr_blocks = [aws_vpc.first_vpc.ipv6_cidr_block]
+  }
+  ingress {
+    description      = "HTTP traffic to the webserver"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "TCP"
+    cidr_blocks      = ["0.0.0.0/0"]
+    #ipv6_cidr_blocks = [aws_vpc.first_vpc.ipv6_cidr_block]
+  }
+  ingress {
+    description      = "SSH traffic to the webserver"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "TCP"
+    cidr_blocks      = [aws_vpc.first_vpc.cidr_block]
+    #ipv6_cidr_blocks = [aws_vpc.first_vpc.ipv6_cidr_block]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1" #This means any protocol is allowed
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "webserver_SG"
+  }
+}
+
+# 7. Create a network interface with an ip in the subnet that was created in step 4
+
+resource "aws_network_interface" "webserver_nic" {
+  subnet_id       = aws_subnet.private_subnet.id
+  private_ips     = ["10.0.1.50"] # This could be any address
+  security_groups = [aws_security_group.allow_webserver.id]
+
+  #attachment {
+   # instance     = aws_instance.allow_webserver.id
+    #device_index = 1
+  #}
+}
+# 8. Assign an elastic IP to the network interface created in step 7
+
+resource "aws_eip" "lb" { # EIP may require IGW to exist prior to association. Use depends_on to set an explicit dependency on the IGW.
+  vpc      = true
+  network_interface = aws_network_interface.webserver_nic.id
+  associate_with_private_ip = "10.0.1.50"   #ip address from the network interface
+  depends_on = [
+    aws_internet_gateway.igw  #Here, the id is not needed because we need the who object and not the reference ID
+  ]
+}
+
+# 9. Create Ubuntu Server and install / enable apache2
+resource "aws_instance" "webserver_instance" {
+  ami           = "ami-09d56f8956ab235b3"
+  instance_type = "t2.micro"
+  availability_zone = "us-east-1a"
+  network_interface {
+    device_index = 0
+    network_interface_id = aws_network_interface.webserver_nic.id
+  }
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo apt update -y
+              sudo apt install apache2 -y
+              sudo systemctl start apache2
+              sudo bash -c 'echo This is my very first web server. </br> I hope I tried. > /var/www/html/index.html'
+              EOF
+  tags = {
+    Name = "MyEC2"
+  }
+}
