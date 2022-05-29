@@ -155,3 +155,14 @@ resource "aws_instance" "webserver_instance" {
     Name = "MyEC2"
   }
 }
+
+In case you need the EC2 machine to run Docker, then replace the content of the user_data with the below:
+
+  user_data = <<-EOF
+              #!/bin/bash
+              yum update -y
+              yum install docker
+              service docker start
+              docker pull nginx:alpine
+              docker run -it -d 	--name my-first-container -p 80:80 nginx:alpine
+              EOF
