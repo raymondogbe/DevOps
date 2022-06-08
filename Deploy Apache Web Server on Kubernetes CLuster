@@ -13,6 +13,9 @@ Note: The kubectl utility on jump_host has been configured to work with the kube
 
 
 SOLUTION:
+
+You can use an imperative way instead of the declarative used in this project
+#kubectl create namespace httpd-namespace-devops
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -25,7 +28,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: httpd-deployment-devops
-  namespace: httpd-namespace-devops
+  namespace: httpd-namespace-devops  (An imperative is kubectl create namespace httpd-namespace-devops )
   labels:
     app: httpd
 spec:
