@@ -60,4 +60,4 @@ spec:
       nodePort: 30004
 
 kubectl get pods --all-namespaces
-kubectl get pods --namespace=httpd-namespace-devops
+kubectl get pods --namespace=httpd-namespace-devops.
