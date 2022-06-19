@@ -22,7 +22,7 @@ Note: Validation will try to run the playbook using command ansible-playbook -i 
 
 SOLUTION:
 ---
-- hosts: stapp01
+- hosts: stapp02
   become: yes
   become_user: root
 
@@ -40,14 +40,11 @@ SOLUTION:
       yum:
         name: php
         state: present
-    - name: lineinfile
-      lineinfile:
+    - name: Replace default Document root
+      replace:
         path: /etc/httpd/conf/httpd.conf
-        # The String to Search
-        regexp: "/var/www/html"             
-        # The String to Replace
-        line: "/var/www/html/myroot"
-        state: present
+        regexp: DocumentRoot \"\/var\/www\/html\"
+        replace: DocumentRoot "/var/www/html/myroot"
     - name: "Create a directory"
       file:
         path: /var/www/html/myroot
