@@ -1,0 +1,40 @@
+QUESTION:
+Nautilus developers are actively working on one of the project repositories, /usr/src/kodekloudrepos/official. 
+They recently decided to implement some new features in the application, and they want to maintain those new changes in a separate branch. 
+Below are the requirements that have been shared with the DevOps team:
+
+On Storage server in Stratos DC create a new branch xfusioncorp_official from master branch in /usr/src/kodekloudrepos/official git repo.
+
+Please do not try to make any changes in code.
+
+
+
+SOLUTIONS:
+Change the server to storage server
+ssh natasha@ststor01
+
+Change directory to root
+#sudo su
+
+Change to the git directory
+# cd /usr/src/kodekloudrepos/official
+ 
+List out all the branches in the git
+# git branch
+* kodekloud_official
+  master
+  
+ 
+ Change the branch to master in order to create a branch according to the task
+  # git checkout master
+Switched to branch 'master'
+
+Create a new branch
+# git checkout -b xfusioncorp_officialSwitched to a new branch 'xfusioncorp_official'
+
+
+Validate by listing our all the branches
+# git branch
+  kodekloud_official
+  master
+* xfusioncorp_official
