@@ -50,3 +50,7 @@ SOLUTION:
       owner: apache
       group: apache
       mode: 0777
+
+
+Reference:
+https://www.educba.com/ansible-loop/?source=leftnav
