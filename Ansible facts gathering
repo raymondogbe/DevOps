@@ -1,0 +1,95 @@
+QUESTION:
+The Nautilus DevOps team is trying to setup a simple Apache web server on all app servers in Stratos DC using Ansible. 
+They also want to create a sample html page for now with some app specific data on it. Below you can find more details about the task.
+
+You will find a valid inventory file /home/thor/playbooks/inventory on jump host (which we are using as an Ansible controller).
+
+Create a playbook index.yml under /home/thor/playbooks directory on jump host. Using blockinfile Ansible module create a file facts.txt under /root directory on all app servers and add the following given block in it. You will need to enable facts gathering for this task.
+Ansible managed node IP is <default ipv4 address>
+(You can obtain default ipv4 address from Ansible's gathered facts by using the correct Ansible variable while taking into account Jinja2 syntax)
+
+Install httpd server on all apps. After that make a copy of facts.txt file as index.html under /var/www/html directory. Make sure to start httpd service after that.
+Note: Do not create a separate role for this task, just add all of the changes in index.yml playbook
+
+
+
+SOLUTION:
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+  become_method: sudo
+  tasks:
+  - name: "Install web server"
+    yum:
+      name: httpd
+      state: present
+  - name: "Start web server"
+    service:
+      name: httpd
+      state: started
+  - name: "Get the ip addresses of the application servers"
+    debug:
+      msg: "Ansible managed node IP is {{ ansible_default_ipv4.address }}"
+  - name: blockinlife
+    blockinfile:
+      path: /root/facts.txt
+      block: |
+        Ansible managed node IP is {{ ansible_default_ipv4.address }}
+      state: present
+      create: True
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0777'
+  - name: "copy fact.txt to /var/www/html.index.html"
+    shell: cp /root/facts.txt /var/www/html/index.html
+    
+  Run the playbook.
+  ansible
+
+
+To validate, use curl
+curl http://stapp01 or 02, 03
+
+
+
+
+
+TASK [Get the ip addresses of the application servers] *********************************************************************************************************************
+ok: [stapp01] => {
+    "msg": "Ansible managed node IP is 172.16.238.10"
+}
+ok: [stapp03] => {
+    "msg": "Ansible managed node IP is 172.16.238.12"
+}
+ok: [stapp02] => {
+    "msg": "Ansible managed node IP is 172.16.238.11"
+}
+
+TASK [blockinlife] *********************************************************************************************************************************************************
+changed: [stapp01]
+changed: [stapp03]
+changed: [stapp02]
+
+TASK [copy fact.txt to /var/www/html.index.html] ***************************************************************************************************************************
+changed: [stapp01]
+changed: [stapp02]
+changed: [stapp03]
+
+PLAY RECAP *****************************************************************************************************************************************************************
+stapp01                    : ok=6    changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+stapp02                    : ok=6    changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+stapp03                    : ok=6    changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+thor@jump_host ~/playbooks$ curl http://stapp01
+# BEGIN ANSIBLE MANAGED BLOCK
+Ansible managed node IP is 172.16.238.10
+# END ANSIBLE MANAGED BLOCK
+thor@jump_host ~/playbooks$ curl http://stapp02
+# BEGIN ANSIBLE MANAGED BLOCK
+Ansible managed node IP is 172.16.238.11
+# END ANSIBLE MANAGED BLOCK
+thor@jump_host ~/playbooks$ curl http://stapp03
+# BEGIN ANSIBLE MANAGED BLOCK
+Ansible managed node IP is 172.16.238.12
+# END ANSIBLE MANAGED BLOCK
