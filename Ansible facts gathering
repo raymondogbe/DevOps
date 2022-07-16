@@ -93,3 +93,7 @@ thor@jump_host ~/playbooks$ curl http://stapp03
 # BEGIN ANSIBLE MANAGED BLOCK
 Ansible managed node IP is 172.16.238.12
 # END ANSIBLE MANAGED BLOCK
+
+
+To get ansible configuration for the all host and the controller
+ansible dev -m setup. The "dev" is the name of the specific or particular host that you want to check.
