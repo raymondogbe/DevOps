@@ -97,3 +97,5 @@ Ansible managed node IP is 172.16.238.12
 
 To get ansible configuration for the all host and the controller
 ansible dev -m setup. The "dev" is the name of the specific or particular host that you want to check.
+OR
+ansible -i inventory all -m setup To check for all the host at once
