@@ -1,0 +1,24 @@
+QUESTION:
+One of the Nautilus developer was working to test new changes on a container. He wants to keep a backup of his changes to the container. 
+A new request has been raised for the DevOps team to create a new image from this container. Below are more details about it:
+
+a. Create an image blog:datacenter on Application Server 2 from a container ubuntu_latest that is running on same server.
+
+
+
+
+
+SOLUTION:
+Since we already have a container running on the server, we can check using #docker ps -a
+
+To create an image using the container, 
+#docker commit <name of the container> <name you want to give to the image>
+e.g docker commit ubuntu_latest blog:container
+
+Just to tag
+docker tag <image-id> <name you want to give to the image>
+
+
+
+Reference:
+https://www.dataset.com/blog/create-docker-image/
