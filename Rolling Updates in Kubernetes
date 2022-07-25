@@ -42,7 +42,7 @@ nginx-deployment   3/3     3            3           6m10s
 
 #kubectl rollout history deployment nginx-deployment --revision=1
 
-#kubectl set image deployment nginx-deployment nginx-container=nginx:1.18. # The nginx-container is the name of the container.
+#kubectl set image deployment nginx-deployment nginx-container=nginx:1.18. # The nginx-container is the name of the container. This is the rollingupdate command
 
 This command set the image of the deployment to 1.18
 
