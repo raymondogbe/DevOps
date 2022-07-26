@@ -17,3 +17,5 @@ docker pull <image-name>
 docker container run -itd -p 8086:80--name official nginx:alpine   - This create and run the container
 
 docker create --name official -p 8086:80 nginx:alpine    This create the container only
+
+Use the docker ps -a and docker images to validate
