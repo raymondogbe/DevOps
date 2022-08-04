@@ -19,3 +19,9 @@ This is different from a git reset because git reset will reset the project to d
 
 #git revert HEAD -- This open a vim page to edit. Here, instead of writing HEAD, you can actually enter the hash of the commit that you want to revert
 Enter the commit message for the revert, that is, git commit "revert news" inside the vim environment.
+
+
+
+Reference
+https://www.atlassian.com/git/tutorials/undoing-changes/git-revert
+https://www.cloudbees.com/blog/git-revert-explained
