@@ -57,4 +57,5 @@ Validate
 ansible stapp01 -a "cat /var/www/html/index.html" -i inventory
 
 References:
+Read more on Ansible roles
 https://spacelift.io/blog/ansible-roles
