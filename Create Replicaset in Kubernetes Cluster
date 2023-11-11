@@ -36,3 +36,5 @@ spec:
  
  NB:
  SO, deployment and replicaset seems to be the same but you only need to replace the "kind".
+deployment is just management of the pods
+replicaset is just a replication controller, It tells how many pods should be created.
