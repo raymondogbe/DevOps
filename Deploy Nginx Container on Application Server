@@ -1,0 +1,15 @@
+QUESTION:
+The Nautilus DevOps team is conducting application deployment tests on selected application servers. 
+They require a nginx container deployment on Application Server 2. Complete the task with the following instructions:
+
+
+On Application Server 2 create a container named nginx_2 using the nginx image with the alpine tag. Ensure container is in a running state.
+
+
+SOLUTION:
+docker run -dit --name nginx_2 -p 80:80 nginx:alpine
+
+-dit = To run in interactive mode and detached mode and to continue on a running state
+--name nginx_2 = The name for the container
+-p 80:80 = The port number for the Host and Container to be exposed
+nginx:alpine = The image to run
