@@ -1,0 +1,15 @@
+An issue has arisen with a static website running in a container named nautilus on App Server 1. To resolve the issue, investigate the following details:
+
+Check if the container's volume /usr/local/apache2/htdocs is correctly mapped with the host's volume /var/www/html.
+
+Verify that the website is accessible on host port 8080 on App Server 1. Confirm that the command curl http://localhost:8080/ works on App Server 1.
+
+
+SOLUTIONS
+What happened here was that the container was exited, that is, it was not running.
+I had to start it.
+Upon running the http://localhost:8080, I was able to access it.
+Now, I had to use the docker inspect <container name> to check if it was properly mounted.
+I checked under the MOUNT section and saw that it is properly mounted.
+I accessed the container using docker exec it <container name> to check the file and I was able to see it under /usr/local/apache2/htdocs/index.html
+Same file was also in the host under /var/www/html/index.html
